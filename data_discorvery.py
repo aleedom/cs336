@@ -32,17 +32,20 @@ class BASKETBALL(object):
 
     def get_avg_price   (self):
         day_index=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-        averages = []
-        for day in day_index:
-            query = "select TicketsSold from BASKETBALL where BASKETBALL.Day='{}'".format(day)
-            self.cursor.execute(query)
-            data = self.cursor.fetchall()
-            s = 0
-            for tup in data:
-                s += tup[0]
-            avg = s/(len(data))
-            averages.append(avg)
+        averages = [0]*7
+        query = "select Day,AVG(TicketsSold) from BASKETBALL group by Day"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+
+        #order the data correcly and make it into a list
+        #record starts as a tuple of tuples, becomes a list of integers
+        #ordered by day starting with monday
+        for record in data:
+            averages[day_index.index(record[0])] = int(record[1])
+        print("Average price: {}".format(averages))
         return averages
+
+
 
     def scorediff_vs_tickets(self):
         """
@@ -116,13 +119,79 @@ class PROFESSOR_MOODY(object):
     def __init__(self,cursor):
         self.cursor = cursor
 
-    def heat_map(self):
-        query = "select Seated,Count(*),AVG(Grade) from PROFESSOR_MOODY group by Seated"
+    def avggrade_vs_row(self):
+
+        query = "select Seated,Grade from PROFESSOR_MOODY"
         self.cursor.execute(query)
-        data = self.cursor.fetchall()
-        print(data)
+        query_result = self.cursor.fetchall()
 
+        #since grades are alphabetical we take it and map to numers with python
+        grade_index = ['F','D','C','B','A']
+        level_index = ['front','middle','back']
+        grades = [[],[],[]]
+        for record in query_result:
+            level = level_index.index(record[0])
+            num_grade = grade_index.index(record[1])
+            grades[level].append(num_grade)
+        avg_grades = []
+        for i in grades:
+            avg_grades.append(sum(i)/float(len(i)))
 
+        ind = np.arange(1,4)
+        width = 0.5
+        fig,ax = plt.subplots()
+        rects1 = ax.bar(ind,avg_grades,width,color='b')
+
+        ax.set_xlabel('Row')
+        ax.set_ylabel('Average Grade')
+        ax.set_title('Average Grade VS Seating Row')
+        ax.set_xticks(ind+width*.5)
+        ax.set_xticklabels( ('1st Row','2nd Row','3rd Row') )
+        plt.show()
+
+    def avggrade_vs_attitude(self):
+        """
+        Attutudes: nice, eager, argumentative, arrogant
+        """
+        query = "select Attitude,Grade from PROFESSOR_MOODY"
+        self.cursor.execute(query)
+        query_result = self.cursor.fetchall()
+        grade_index = ['F','D','C','B','A']
+        att_index = ['nice','eager','argumentative','arrogant']
+        grades = [[],[],[],[]]
+        grade_sum = 0
+        num_students = [0,0,0,0,209]
+        for record in query_result:
+            attitude = att_index.index(record[0])
+            num_grade = grade_index.index(record[1])
+            grades[attitude].append(num_grade)
+            num_students[attitude] += 1
+            grade_sum += num_grade
+        class_avg = grade_sum/209.
+        avg_grades = []
+        for i in grades:
+            avg_grades.append(sum(i)/float(len(i)))
+        avg_grades.append(class_avg)
+
+        print("Class average: {}. num_students: {}".format(class_avg,num_students))
+        #graph the data
+        ind = np.arange(1,6)
+        width = 0.3
+        fig,ax1 = plt.subplots()
+        rects1 = ax1.bar(ind,avg_grades,width,color='purple')
+
+        ax2 = ax1.twinx()
+        rects2 = ax2.bar(ind+width,num_students,width,color='green')
+
+        ax1.set_xlabel('Attitude')
+        ax1.set_ylabel('Average Grade')
+        ax1.set_title('Average Grade VS Attitude')
+        ax1.set_xticks(ind+width)
+        ax1.set_xticklabels( ['nice','eager','argumentative','arrogant','class'] )
+        ax2.set_ylabel('Number of Students in Catgeory')
+
+        ax1.legend( (rects1[0], rects2[0]), ('Grade','Num Students'))
+        plt.show()
 class WINEJUNE9(object):
     """
     columns:
@@ -140,4 +209,4 @@ class WINEJUNE9(object):
 #a.scorediff_vs_tickets()
 
 b = PROFESSOR_MOODY(cursor)
-b.heat_map()
+b.avggrade_vs_attitude()
