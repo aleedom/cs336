@@ -73,6 +73,9 @@ class BASKETBALL(object):
         plt.show()
 
     def tickets_vs_day(self):
+        """
+        As you would expect games which are held on the weekends sell amost 3x more tickets on average than games held during the week
+        """
         #plot
         ind = np.arange(1,8)
         width = 0.75
@@ -113,6 +116,12 @@ class PROFESSOR_MOODY(object):
     def __init__(self,cursor):
         self.cursor = cursor
 
+    def heat_map(self):
+        query = "select Seated,Count(*),AVG(Grade) from PROFESSOR_MOODY group by Seated"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        print(data)
+
 
 class WINEJUNE9(object):
     """
@@ -126,8 +135,9 @@ class WINEJUNE9(object):
 
 
 
-a = BASKETBALL(cursor)
+#a = BASKETBALL(cursor)
 #a.tickets_vs_day()
-a.tickets_vs_day()
-a.scorediff_vs_tickets()
+#a.scorediff_vs_tickets()
 
+b = PROFESSOR_MOODY(cursor)
+b.heat_map()
