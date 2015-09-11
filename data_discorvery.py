@@ -29,6 +29,7 @@ class BASKETBALL(object):
     def __init__(self,cursor):
         self.cursor = cursor
         self.avg_price = self.get_avg_price()
+
     def get_avg_price   (self):
         day_index=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
         averages = []
@@ -43,23 +44,32 @@ class BASKETBALL(object):
             averages.append(avg)
         return averages
 
-    def score_diff(self):
-        test = "select ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold,Day from BASKETBALL"
-
-        self.cursor.execute(test)
+    def scorediff_vs_tickets(self):
+        """
+        while the data itself isn't very usefull the shape of the data is quite interesting.
+        The shape,which is very square, shows that most games sell a minimum amount of tickets (5000),
+        most stadiums only seat 10,000 people and that the closest games are housed in the biggest stadiums
+        and sell the most tickets.
+        """
+        #getting the data
+        query = "select ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold from BASKETBALL"
+        self.cursor.execute(query)
         data = self.cursor.fetchall()
+
+        #transforming data to be usable from tuple of tuples into a list
         score_diff = []
         tickets_sold = []
         for tup in data:
             score_diff.append(tup[0])
             tickets_sold.append(tup[1])
-        hist = [0]*60
-        for data in score_diff:
-            hist[data] += 1
 
-
+        #plot the data
         fig1,ax = plt.subplots()
         rects2 = ax.scatter(score_diff,tickets_sold)
+
+        ax.set_xlabel('Score Difference')
+        ax.set_ylabel('Tickets Sold')
+        ax.set_title('Tickets Sold VS Score Difference')
         plt.show()
 
     def tickets_vs_day(self):
@@ -76,10 +86,6 @@ class BASKETBALL(object):
         ax.set_xticklabels( ('Mon','Tue','Wed','Thu','Fri','Sat','Sun'))
         plt.show()
 
-    def tickets_vs_scoredif(self):
-        """
-        hello world
-        """
 
 class DOGOWNERS(object):
     """
@@ -122,4 +128,6 @@ class WINEJUNE9(object):
 
 a = BASKETBALL(cursor)
 #a.tickets_vs_day()
-a.score_diff()
+a.tickets_vs_day()
+a.scorediff_vs_tickets()
+
