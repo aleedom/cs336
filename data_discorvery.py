@@ -43,7 +43,7 @@ class BASKETBALL(object):
             averages.append(avg)
         return averages
 
-    def get_score_diff(self):
+    def score_diff(self):
         test = "select ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold,Day from BASKETBALL"
 
         #bin1 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 5"
@@ -55,19 +55,27 @@ class BASKETBALL(object):
         #bin7 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 30"
         self.cursor.execute(test)
         data = self.cursor.fetchall()
-        l = []
+        diff = []
+        ts = []
         for tup in data:
-            l.append(tup[0])
+            diff.append(tup[0])
+            ts.append(tup[1])
         hist = [0]*60
-        for data in l:
+        for data in diff:
             hist[data] += 1
 
-        ind = np.arange(len(hist))
-        width = 0.4
-        fig,ax = plt.subplots()
-        rects1 = ax.bar(ind,hist,width,color='b')
+        #ind = np.arange(len(hist))
+        #width = 0.4
+        #fig,ax = plt.subplots()
+        #rects1 = ax.bar(ind,hist,width,color='b')
 
+        print(ts)
+        #plt.show()
+
+        fig2,bx = plt.subplots()
+        rects2 = bx.scatter(diff,ts)
         plt.show()
+
     def tickets_vs_day(self):
         #plot
         ind = np.arange(1,8)
@@ -128,4 +136,4 @@ class WINEJUNE9(object):
 
 a = BASKETBALL(cursor)
 #a.tickets_vs_day()
-a.get_score_diff()
+a.score_diff()
