@@ -46,34 +46,20 @@ class BASKETBALL(object):
     def score_diff(self):
         test = "select ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold,Day from BASKETBALL"
 
-        #bin1 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 5"
-        #bin2 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 5 and ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 10"
-        #bin3 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 10 and ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 15"
-        #bin4 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 15 and ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 20"
-        #bin5 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 20 and ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 25"
-        #bin6 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 25 and ABS(BASKETBALL.Score1-BASKETBALL.Score2) <= 30"
-        #bin7 = "select * from BASKETBALL where ABS(BASKETBALL.Score1-BASKETBALL.Score2) > 30"
         self.cursor.execute(test)
         data = self.cursor.fetchall()
-        diff = []
-        ts = []
+        score_diff = []
+        tickets_sold = []
         for tup in data:
-            diff.append(tup[0])
-            ts.append(tup[1])
+            score_diff.append(tup[0])
+            tickets_sold.append(tup[1])
         hist = [0]*60
-        for data in diff:
+        for data in score_diff:
             hist[data] += 1
 
-        #ind = np.arange(len(hist))
-        #width = 0.4
-        #fig,ax = plt.subplots()
-        #rects1 = ax.bar(ind,hist,width,color='b')
 
-        print(ts)
-        #plt.show()
-
-        fig2,bx = plt.subplots()
-        rects2 = bx.scatter(diff,ts)
+        fig1,ax = plt.subplots()
+        rects2 = ax.scatter(score_diff,tickets_sold)
         plt.show()
 
     def tickets_vs_day(self):
