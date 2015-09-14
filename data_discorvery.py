@@ -9,7 +9,7 @@ import numpy as np
 pd.set_option('display.width', 1000000)
 
 
-db_host = "cs336-1.c28ltethrrc0.us-east-1.rds.amazonaws.com"
+db_host = "cs336-2.c28ltethrrc0.us-east-1.rds.amazonaws.com"
 db_port = 3306
 db_user = "student"
 db_pass = "student"
@@ -33,7 +33,7 @@ class BASKETBALL(object):
     def get_avg_price   (self):
         day_index=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
         averages = [0]*7
-        query = "select Day,AVG(TicketsSold) from BASKETBALL group by Day"
+        query = "SELECT Day,AVG(TicketsSold) from BASKETBALL group by Day"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
 
@@ -55,7 +55,7 @@ class BASKETBALL(object):
         and sell the most tickets.
         """
         #getting the data
-        query = "select ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold from BASKETBALL"
+        query = "SELECT ABS(BASKETBALL.Score1-BASKETBALL.Score2),TicketsSold from BASKETBALL"
         self.cursor.execute(query)
         data = self.cursor.fetchall()
 
@@ -210,3 +210,4 @@ class WINEJUNE9(object):
 
 b = PROFESSOR_MOODY(cursor)
 b.avggrade_vs_attitude()
+conn.close()
