@@ -1,15 +1,9 @@
 import MySQLdb as msdb
-from operator import itemgetter
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-#pandas config
-pd.set_option('display.width', 1000000)
-
-
-db_host = "cs336-2.c28ltethrrc0.us-east-1.rds.amazonaws.com"
+db_host = "cs336-1.c28ltethrrc0.us-east-1.rds.amazonaws.com"
 db_port = 3306
 db_user = "student"
 db_pass = "student"
@@ -42,7 +36,7 @@ class BASKETBALL(object):
         #ordered by day starting with monday
         for record in data:
             averages[day_index.index(record[0])] = int(record[1])
-        print("Average price: {}".format(averages))
+        #print("Average price: {}".format(averages))
         return averages
 
 
@@ -91,24 +85,6 @@ class BASKETBALL(object):
         ax.set_xticks(ind+width*.5)
         ax.set_xticklabels( ('Mon','Tue','Wed','Thu','Fri','Sat','Sun'))
         plt.show()
-
-
-class DOGOWNERS(object):
-    """
-    columns:
-        First -- Last -- Personality -- Dog -- Trait -- Dog_Age
-    """
-    def __init__(self,cursor):
-        self.cursor = cursor
-
-
-class HAPPY(object):
-    """
-    columns:
-        Born -- Lives -- Happiness
-    """
-    def __init__(self,cursor):
-        self.cursor = cursor
 
 
 class PROFESSOR_MOODY(object):
@@ -173,7 +149,7 @@ class PROFESSOR_MOODY(object):
             avg_grades.append(sum(i)/float(len(i)))
         avg_grades.append(class_avg)
 
-        print("Class average: {}. num_students: {}".format(class_avg,num_students))
+        #print("Class average: {}. num_students: {}".format(class_avg,num_students))
         #graph the data
         ind = np.arange(1,6)
         width = 0.3
@@ -192,22 +168,14 @@ class PROFESSOR_MOODY(object):
 
         ax1.legend( (rects1[0], rects2[0]), ('Grade','Num Students'))
         plt.show()
-class WINEJUNE9(object):
-    """
-    columns:
-        FIXED_ACIDITY -- VOLATILE_ACIDITY -- RESIDUAL_SUGAR -- FREE_SULFUR_DIOXIDE
-        -- TOTAL_SULFUR_DIOXIDE -- ALCOHOL -- QUALITY -- COUNTRY -- PRICE_A -- RATE
-        -- YEAR -- PH
-    """
-    def __init__(self,cursor):
-        self.cursor = cursor
 
 
 
-#a = BASKETBALL(cursor)
-#a.tickets_vs_day()
-#a.scorediff_vs_tickets()
+
+a = BASKETBALL(cursor)
+a.scorediff_vs_tickets()
 
 b = PROFESSOR_MOODY(cursor)
 b.avggrade_vs_attitude()
+
 conn.close()
