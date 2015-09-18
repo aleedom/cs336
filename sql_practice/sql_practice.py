@@ -317,7 +317,7 @@ if len(sys.argv) == 1 and sys.argv[0] == "all":
     func_names = (f_name for f_name,t in mem_list)
 else:
     func_names = sys.argv
-print(func_names)
+    
 for name in func_names:
     try:
         func_to_call = getattr(a,name)
