@@ -122,7 +122,7 @@ class db_testing(object):
         data = cursor.fetchall()
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Drinker'},inplace=True)
         print("Question 6: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q07(self):
@@ -144,7 +144,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Drinker'},inplace=True)
         print("Question 7: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q08(self):
@@ -164,7 +164,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Drinker'},inplace=True)
         print("Question 8: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q09(self):
@@ -180,7 +180,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Beer'},inplace=True)
         print("Question 9: \n\t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q10(self):
@@ -196,7 +196,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'beer'},inplace=True)
         print("Question 10: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q11(self):
@@ -212,7 +212,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Avg Price'},inplace=True)
         print("Question 11: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q12(self):
@@ -227,7 +227,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Bar'},inplace=True)
         print("Question 12: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q13(self):
@@ -242,7 +242,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Bar'},inplace=True)
         print("Question 13: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q14(self):
@@ -258,7 +258,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Bar'},inplace=True)
         print("Question 14: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q15(self):
@@ -276,7 +276,7 @@ class db_testing(object):
 
         df = pd.DataFrame( [[ij for ij in i] for i in data] )
 
-        #df.rename(columns = {0:'Drinker',1:'Bar'},inplace=True)
+        df.rename(columns = {0:'Bar'},inplace=True)
         print("Question 15: \t{}\n\nQuery: {}\n Result: \n{}\n\n{}\n".format(question,q,df,self.buffer))
 
     def q16(self):
