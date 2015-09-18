@@ -1,4 +1,3 @@
-<generator object <genexpr> at 0x7fbbc40db7d0>
 Question 1: 	Drinkers who  do not frequent Seven Bamboo
 Query:  SELECT distinct(Drinker)
                 FROM BarBeerDrinker.frequents
