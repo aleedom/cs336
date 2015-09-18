@@ -1,0 +1,229 @@
+1.  Drinkers who  do not frequent Seven Bamboo
+    query:
+        SELECT DISTINCT(Drinker)
+        FROM BarBeerDrinker.frequents
+        WHERE Drinker not in (
+            SELECT Drinker
+            FROM BarBeerDrinker.frequents
+            WHERE bar = 'Seven Bamboo'
+        )
+    output:
+        0      Bob
+        1     Erik
+        2    Jesse
+        3     John
+        4   Justin
+        5     Mike
+        6  Rebecca
+        7      Tom
+
+2.  Drinkers who frequent only Blue Angel
+    query:
+        SELECT DISTINCT(Drinker)
+        FROM BarBeerDrinker.frequents
+        WHERE bar = 'Blue Angel' and Drinker not in(
+            Select Drinker
+            FROM BarBeerDrinker.frequents
+            WHERE bar != 'Blue Angel'
+        )
+    output:
+        0   Erik
+        1  Jesse
+
+3.  Drinkers who frequent exactly two bars
+    query:
+        SELECT Drinker,Count(*)
+        FROM BarBeerDrinker.frequents
+        GROUP BY Drinker
+        Having Count(*)=2
+    output:
+        0     Bob  2
+        1    Herb  2
+        2    John  2
+        3  Justin  2
+        4     Tom  2
+        5   Vince  2
+
+4.  Drinkers who frequent at least two bars
+    query:
+        SELECT Drinker,Count(*)
+        FROM BarBeerDrinker.frequents
+        GROUP BY Drinker
+        Having Count(*)>=2
+    output:
+        0      Bob  2
+        1     Herb  2
+        2     John  2
+        3   Justin  2
+        4     Mike  3
+        5  Rebecca  3
+        6      Tom  2
+        7    Vince  2
+
+5.  Drinkers who frequent all bars
+    query:
+        SELECT Drinker,Count(*) as c1
+        FROM BarBeerDrinker.frequents
+        GROUP BY Drinker
+        Having c1 = (
+            Select Count(*)
+            FROM bars
+        )
+    output:
+        No Rows
+
+6.  Drinkers who frequent bars which serve some beer they like
+    query:
+        SELECT distinct(f.Drinker)
+        FROM BarBeerDrinker.frequents as f,BarBeerDrinker.sells as s,BarBeerDrinker.likes as l
+        WHERE f.Drinker = l.Drinker
+            and l.beer = s.beer
+            and s.bar = f.bar
+    output:
+        0   John
+        1   Mike
+        2  Jesse
+
+7.  Drinkers who only frequent bars which serve beers they like
+    query:
+        SELECT Distinct(f1.drinker)
+        FROM frequents as f1
+        GROUP BY f1.drinker
+        having count(f1.bar) = (
+            SELECT COUNT(distinct(f2.bar))
+            FROM frequents as f2,likes as l,sells as s
+            where f2.bar = s.bar and f2.drinker=l.drinker and l.beer=s.beer and f2.drinker=f1.drinker
+        )
+    output:
+        0   Mike
+        1  Jesse
+
+8.  Drinkers who like every beer served by Caravan
+    query:
+        SELECT l.Drinker
+        FROM BarBeerDrinker.likes as l ,BarBeerDrinker.sells as s
+        WHERE s.bar='Caravan' and s.beer=l.beer
+        group by l.Drinker
+        having count(l.beer) = (
+            SELECT Count(*)
+            FROM BarBeerDrinker.sells
+            where sells.bar='Caravan'
+        )
+
+    output:
+        Mike
+
+9.  Beers that are served at exactly two bars
+    query:
+        SELECT s.beer
+        FROM BarBeerDrinker.sells as s
+        GROUP BY s.Beer
+        having count(s.Bar)=2
+    output:
+        0             Hefeweizen
+        1  Hefeweizen Doppelbock
+        2              Killian's
+
+10. Beers served for exactly $5 at either Cabana or The B-Hive, or both
+    query:
+        SELECT s.Beer
+        FROM BarBeerDrinker.sells as s
+        WHERE price = 5.00
+            and (s.bar = 'Cabana' or s.bar='The B-Hive')"
+    output:
+        0            Budweiser
+        1  Michelob Amber Bock
+
+11. Find the average price of all beer served at Cabana
+    query:
+        "SELECT AVG(price)
+        FROM BarBeerDrinker.sells as s
+        WHERE s.bar = 'Cabana'
+        GROUP BY bar"
+    output:
+        5.000000
+
+12. Bars that serve some beer that is served only by itself
+    query:
+        SELECT s.bar
+        FROM BarBeerDrinker.sells as s
+        GROUP BY bar
+        HAVING count(s.beer) = 1
+    output:
+        0                       A.P. Stump's
+        1                        Blue Tattoo
+        2                     Britannia Arms
+        3                             Cabana
+        4                           Club 175
+        5   Coconut Willie's Cocktail Lounge
+        6                            Eulipia
+        7                        Gecko Grill
+        8                 Giza Hookah Lounge
+        9                        Hedley Club
+        10                      Seven Bamboo
+        11                        The B-Hive
+        12                      The Backbeat
+        13                    The Blank Club
+
+13. Bars that are frequented by both Mike and John
+    query:
+        SELECT DISTINCT(f1.Bar)
+        FROM BarBeerDrinker.frequents as f1,BarBeerDrinker.frequents as f2
+        WHERE f1.Drinker='Mike' and f2.Drinker='John'
+    output:
+        0        A.P. Stump's
+        1          Blue Angel
+        2  The Shark and Rose
+
+14. Bars that sell the beer Budweiser for $5 or less
+    query:
+        SELECT s.Bar
+        FROM BarBeerDrinker.sells as s
+        WHERE beer = 'Budweiser' and price<=5
+        GROUP BY bar
+
+    output:
+        0                            Cabana
+        1                          Club 175
+        2  Coconut Willie's Cocktail Lounge
+        3                       Gecko Grill
+        4                      Seven Bamboo
+        5                The Shark and Rose
+
+15. Bars that do not sell any beers for exactly $5
+    query:
+        "SELECT DISTINCT(s.bar)
+        FROM BarBeerDrinker.sells as s
+        WHERE bar not in (
+            Select s2.bar
+            FROM BarBeerDrinker.sells as s2
+            WHERE price = 5
+        )
+    output:
+        0                       A.P. Stump's
+        1                         Blue Angel
+        2                        Blue Tattoo
+        3                     Britannia Arms
+        4                            Caravan
+        5                           Club 175
+        6   Coconut Willie's Cocktail Lounge
+        7                            Eulipia
+        8                        Gecko Grill
+        9                 Giza Hookah Lounge
+        10                       Hedley Club
+        11                      Seven Bamboo
+        12                      The Backbeat
+        13                    The Blank Club
+        14                The Shark and Rose
+
+    16. Bars that serve Budweiser and are frequented by at least one customer who likes Blue Moon
+    query:
+        SELECT s.bar
+        FROM BarBeerDrinker.sells as s,BarBeerDrinker.frequents as f,BarBeerDrinker.likes as l
+        WHERE s.beer='Budweiser'
+        and f.bar = s.bar
+        and f.Drinker=l.Drinker
+        and l.beer='Blue Moon'
+    output:
+        0             Caravan
+        1  The Shark and Rose
